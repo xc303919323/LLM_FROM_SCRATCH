@@ -158,7 +158,6 @@ class Qwen3AttentionWithKVCache:
 
     def forward(self, hidden_states, attention_mask=None, position_ids=None, use_cache=False, cache_position=None):
         batch_size, seq_len, _ = hidden_states.shape
-       
         # 投影
         q = self.q_proj.forward(hidden_states)
         k = self.k_proj.forward(hidden_states)
@@ -356,9 +355,10 @@ class Qwen3ModelWithKVCache:
                 next_token = torch.argmax(next_token_logits, dim=-1, keepdim=True)
                 generated = torch.cat([generated, next_token], dim=1)
 
-                print(tokenizer.decode(int(next_token), skip_special_tokens=True).strip())
+                print(tokenizer.decode(int(next_token), skip_special_tokens=True).strip(), end="", flush=True)
 
                 if next_token.item() in [151645, 151643]:
+                    print()
                     break
 
         return generated
@@ -378,7 +378,7 @@ class Qwen3ModelWithKVCache:
             next_token = torch.argmax(next_token_logits, dim=-1, keepdim=True)
             generated = torch.cat([generated, next_token], dim=1)
 
-            print(tokenizer.decode(int(next_token), skip_special_tokens=True).strip())
+            print(tokenizer.decode(int(next_token), skip_special_tokens=True).strip(), end="", flush=True)
 
             if next_token.item() in [151645, 151643]:
                 break
